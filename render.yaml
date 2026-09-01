@@ -1,0 +1,62 @@
+# Blueprint oficial do n8n no Render (plano free).
+# Web service + Postgres. O free dorme após ~15 min sem uso
+# e o banco free expira em 30 dias.
+
+services:
+  - type: web
+    plan: free
+    runtime: image
+    name: n8n-service
+    image:
+      url: docker.io/n8nio/n8n:2.36.9
+    envVars:
+      - key: N8N_ENCRYPTION_KEY
+        generateValue: true
+      - key: PORT
+        value: "5678"
+      - key: N8N_PORT
+        value: "5678"
+      - key: N8N_PROTOCOL
+        value: https
+      - key: N8N_HOST
+        fromService:
+          name: n8n-service
+          type: web
+          envVarKey: RENDER_EXTERNAL_HOSTNAME
+      - key: WEBHOOK_URL
+        fromService:
+          name: n8n-service
+          type: web
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: GENERIC_TIMEZONE
+        value: America/Sao_Paulo
+      - key: TZ
+        value: America/Sao_Paulo
+      - key: N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS
+        value: "true"
+      - key: DB_TYPE
+        value: postgresdb
+      - key: DB_POSTGRESDB_DATABASE
+        fromDatabase:
+          name: n8n-db
+          property: database
+      - key: DB_POSTGRESDB_HOST
+        fromDatabase:
+          name: n8n-db
+          property: host
+      - key: DB_POSTGRESDB_PORT
+        fromDatabase:
+          name: n8n-db
+          property: port
+      - key: DB_POSTGRESDB_PASSWORD
+        fromDatabase:
+          name: n8n-db
+          property: password
+      - key: DB_POSTGRESDB_USER
+        fromDatabase:
+          name: n8n-db
+          property: user
+
+databases:
+  - name: n8n-db
+    plan: free
