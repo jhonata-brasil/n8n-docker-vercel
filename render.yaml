@@ -1,15 +1,16 @@
-# Blueprint oficial do n8n no Render (plano free).
-# Web service + Postgres. O free dorme após ~15 min sem uso
-# e o banco free expira em 30 dias.
+# n8n leve no Render (plano free).
+# Constrói Alpine + n8n 1.121.3 (um processo, sem runner 2.x).
+# O free dorme após ~15 min e o Postgres free expira em 30 dias.
 
 services:
   - type: web
     plan: free
-    runtime: image
+    runtime: docker
     name: n8n-service
+    branch: setup-n8n
+    dockerfilePath: ./Dockerfile.render
+    dockerContext: .
     healthCheckPath: /healthz
-    image:
-      url: docker.io/n8nio/n8n:2.36.9
     envVars:
       - key: N8N_ENCRYPTION_KEY
         generateValue: true
@@ -20,7 +21,9 @@ services:
       - key: N8N_LISTEN_ADDRESS
         value: "0.0.0.0"
       - key: NODE_OPTIONS
-        value: "--max-old-space-size=384"
+        value: "--max-old-space-size=350"
+      - key: N8N_RUNNERS_ENABLED
+        value: "false"
       - key: N8N_DIAGNOSTICS_ENABLED
         value: "false"
       - key: N8N_VERSION_NOTIFICATIONS_ENABLED
@@ -32,7 +35,7 @@ services:
           name: n8n-service
           type: web
           envVarKey: RENDER_EXTERNAL_HOSTNAME
-      - key: N8N_WEBHOOK_URL
+      - key: WEBHOOK_URL
         fromService:
           name: n8n-service
           type: web
