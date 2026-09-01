@@ -58,3 +58,14 @@ Limites do plano gratuito:
 - o banco free some em 30 dias
 
 Depois do deploy, abra a URL `*.onrender.com` e crie o primeiro usuário do n8n.
+
+### Manter o n8n acordado (GitHub Actions)
+
+O plano free do Render dorme sem tráfego. O workflow `Keep Alive` chama `/healthz` a cada 5 minutos.
+
+1. No GitHub: **Settings → Secrets and variables → Actions → New repository secret**
+2. Nome: `N8N_KEEPALIVE_URL`
+3. Valor: `https://SEU-SERVICO.onrender.com/healthz`
+4. Em **Actions**, rode **Keep Alive** uma vez (Run workflow) para ativar o agendamento
+
+O cron do GitHub pode atrasar alguns minutos. Não é 24h garantido.
