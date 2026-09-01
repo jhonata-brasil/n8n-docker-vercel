@@ -38,7 +38,7 @@ A Vercel **não é um host de Docker persistente**. Ela empacota a imagem como f
 - quebra agendamentos, filas e execuções longas
 - webhooks e o editor tendem a falhar
 
-Imagem base: `docker.n8n.io/n8nio/n8n:2.36.9` (linha estável recente).
+A imagem é montada com Node 22 do Amazon ECR (`public.ecr.aws`) e `n8n@2.36.9` via npm, para não bater no limite de pull anônimo do Docker Hub.
 
 O arquivo `Dockerfile.vercel` existe só para a Vercel detectar a imagem. **Não use isso como n8n de produção.**
 
