@@ -48,7 +48,7 @@ Abra este link, conecte o GitHub e clique em **Apply**:
 
 [https://render.com/deploy?repo=https://github.com/jhonata-brasil/n8n-docker-vercel](https://render.com/deploy?repo=https://github.com/jhonata-brasil/n8n-docker-vercel)
 
-Use a branch `setup-n8n`. O arquivo `render.yaml` cria o n8n (plano free) e um Postgres free.
+Use a branch `setup-n8n`. O Render constrói `Dockerfile.render`: Alpine + n8n **1.121.3** (mais leve que a 2.x). O `render.yaml` cria o n8n (plano free) e um Postgres free.
 
 Limites do plano gratuito:
 
