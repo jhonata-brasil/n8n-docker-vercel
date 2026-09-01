@@ -7,6 +7,7 @@ services:
     plan: free
     runtime: image
     name: n8n-service
+    healthCheckPath: /healthz
     image:
       url: docker.io/n8nio/n8n:2.36.9
     envVars:
@@ -16,6 +17,14 @@ services:
         value: "5678"
       - key: N8N_PORT
         value: "5678"
+      - key: N8N_LISTEN_ADDRESS
+        value: "0.0.0.0"
+      - key: NODE_OPTIONS
+        value: "--max-old-space-size=384"
+      - key: N8N_DIAGNOSTICS_ENABLED
+        value: "false"
+      - key: N8N_VERSION_NOTIFICATIONS_ENABLED
+        value: "false"
       - key: N8N_PROTOCOL
         value: https
       - key: N8N_HOST
@@ -23,7 +32,7 @@ services:
           name: n8n-service
           type: web
           envVarKey: RENDER_EXTERNAL_HOSTNAME
-      - key: WEBHOOK_URL
+      - key: N8N_WEBHOOK_URL
         fromService:
           name: n8n-service
           type: web
@@ -36,6 +45,10 @@ services:
         value: "true"
       - key: DB_TYPE
         value: postgresdb
+      - key: DB_POSTGRESDB_CONNECTION_TIMEOUT
+        value: "60000"
+      - key: DB_POSTGRESDB_POOL_SIZE
+        value: "5"
       - key: DB_POSTGRESDB_DATABASE
         fromDatabase:
           name: n8n-db
